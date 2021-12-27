@@ -508,6 +508,13 @@ class ObjectEditView(GetReturnURLMixin, ObjectPermissionRequiredMixin, View):
         form = self.model_form(instance=obj, initial=initial_data)
         restrict_form_fields(form, request.user)
 
+        # If this is an HTMX request, return only the rendered form HTML
+        if is_htmx(request):
+            return render(request, 'htmx/form.html', {
+                'form': form,
+                'form_url': request.path,
+            })
+
         return render(request, self.template_name, {
             'obj': obj,
             'obj_type': self.queryset.model._meta.verbose_name,

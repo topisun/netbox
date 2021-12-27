@@ -10,6 +10,7 @@ from .utils import add_blank_choice, parse_numeric_range
 
 __all__ = (
     'APISelect',
+    'APISelectWithAdd',
     'APISelectMultiple',
     'BulkEditNullBooleanSelect',
     'ClearableFileInput',
@@ -272,6 +273,10 @@ class APISelect(SelectWithDisabled):
         Process & add a key/value pair of URL query parameters to the widget attributes.
         """
         self.add_query_params({key: value})
+
+
+class APISelectWithAdd(APISelect):
+    template_name = 'widgets/apiselect_with_add.html'
 
 
 class APISelectMultiple(APISelect, forms.SelectMultiple):

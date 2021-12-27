@@ -1,4 +1,5 @@
 from django import forms
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -12,9 +13,9 @@ from extras.models import Tag
 from ipam.models import ASN, IPAddress, VLAN, VLANGroup, VRF
 from tenancy.forms import TenancyForm
 from utilities.forms import (
-    APISelect, add_blank_choice, BootstrapMixin, ClearableFileInput, CommentField, ContentTypeChoiceField,
-    DynamicModelChoiceField, DynamicModelMultipleChoiceField, JSONField, NumericArrayField, SelectWithPK, SmallTextarea,
-    SlugField, StaticSelect,
+    APISelect, APISelectWithAdd, add_blank_choice, BootstrapMixin, ClearableFileInput, CommentField,
+    ContentTypeChoiceField,  DynamicModelChoiceField, DynamicModelMultipleChoiceField, JSONField, NumericArrayField,
+    SelectWithPK, SmallTextarea, SlugField, StaticSelect,
 )
 from virtualization.models import Cluster, ClusterGroup
 from wireless.models import WirelessLAN, WirelessLANGroup
@@ -111,7 +112,10 @@ class SiteGroupForm(CustomFieldModelForm):
 class SiteForm(TenancyForm, CustomFieldModelForm):
     region = DynamicModelChoiceField(
         queryset=Region.objects.all(),
-        required=False
+        required=False,
+        widget=APISelectWithAdd(attrs={
+            'add_url': reverse_lazy('dcim:region_add'),
+        })
     )
     group = DynamicModelChoiceField(
         queryset=SiteGroup.objects.all(),

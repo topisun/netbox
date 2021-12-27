@@ -1,0 +1,27 @@
+{% load form_helpers %}
+
+<form method="post" enctype="multipart/form-data" class="form-object-edit">
+  {% csrf_token %}
+  <input type="hidden" name="_addanother" value="true" />
+  <div class="modal-body">
+    {% for field in form.hidden_fields %}
+      {{ field }}
+    {% endfor %}
+    <div class="field-group my-5">
+      {% render_form form %}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button
+      form="htmx"
+      type="button"
+      class="btn btn-primary"
+      hx-post="{{ form_url }}"
+      hx-target="#object-edit-modal-content"
+      hx-swap="innerHTML"
+    >Save</button>
+  </div>
+</form>
+
+{% include 'inc/messages.html' %}
