@@ -14,7 +14,7 @@ from ipam.models import ASN, IPAddress, VLAN, VLANGroup, VRF
 from tenancy.forms import TenancyForm
 from utilities.forms import (
     APISelect, APISelectWithAdd, add_blank_choice, BootstrapMixin, ClearableFileInput, CommentField,
-    ContentTypeChoiceField,  DynamicModelChoiceField, DynamicModelMultipleChoiceField, JSONField, NumericArrayField,
+    ContentTypeChoiceField, DynamicModelChoiceField, DynamicModelMultipleChoiceField, JSONField, NumericArrayField,
     SelectWithPK, SmallTextarea, SlugField, StaticSelect,
 )
 from virtualization.models import Cluster, ClusterGroup
