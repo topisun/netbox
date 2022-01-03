@@ -4,7 +4,7 @@ import { initMoveButtons } from './moveOptions';
 import { initReslug } from './reslug';
 import { initSelectAll } from './selectAll';
 
-export function initButtons(): void {
+export function initButtons(base?: Element): void {
   for (const func of [
     initDepthToggle,
     initConnectionToggle,
@@ -12,6 +12,6 @@ export function initButtons(): void {
     initSelectAll,
     initMoveButtons,
   ]) {
-    func();
+    func(base);
   }
 }

@@ -30,7 +30,7 @@ function handleSearchDropdownClick(event: Event, button: HTMLButtonElement): voi
 /**
  * Initialize Search Bar Elements.
  */
-function initSearchBar(): void {
+function initSearchBar(_?: Element): void {
   for (const dropdown of getElements<HTMLUListElement>('.search-obj-selector')) {
     for (const button of dropdown.querySelectorAll<HTMLButtonElement>(
       'li > button.dropdown-item',
@@ -40,8 +40,8 @@ function initSearchBar(): void {
   }
 }
 
-export function initSearch(): void {
+export function initSearch(base?: Element): void {
   for (const func of [initSearchBar]) {
-    func();
+    func(base);
   }
 }

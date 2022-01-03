@@ -119,10 +119,11 @@ function handleScopeChange<P extends keyof ShowHideMap>(view: P, element: HTMLSe
 /**
  * Initialize scope type select event listeners.
  */
-export function initScopeSelector(): void {
+export function initScopeSelector(base?: Element): void {
   for (const view of Object.keys(showHideMap)) {
     for (const element of getElements<HTMLSelectElement>(
       `html[data-netbox-url-name="${view}"] #id_scope_type`,
+      { base },
     )) {
       handleScopeChange(view, element);
       element.addEventListener('change', () => handleScopeChange(view, element));

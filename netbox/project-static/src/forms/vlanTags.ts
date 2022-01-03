@@ -139,7 +139,7 @@ function handleModeChange(element: HTMLSelectElement): void {
   }
 }
 
-export function initVlanTags(): void {
+export function initVlanTags(_?: Element): void {
   const element = getElement<HTMLSelectElement>('id_mode');
   if (element !== null) {
     element.addEventListener('change', () => handleModeChange(element));

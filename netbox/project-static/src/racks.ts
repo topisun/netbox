@@ -8,11 +8,8 @@ export type RackViewState = { view: RackViewSelection };
 /**
  * Show or hide images and labels to build the desired rack view.
  */
-function setRackView(
-  view: RackViewSelection,
-  elevation: HTMLObjectElement,
-): void {
-  switch(view) {
+function setRackView(view: RackViewSelection, elevation: HTMLObjectElement): void {
+  switch (view) {
     case 'images-and-labels': {
       showRackElements('image.device-image', elevation);
       showRackElements('text.device-image-label', elevation);
@@ -31,20 +28,14 @@ function setRackView(
   }
 }
 
-function showRackElements(
-  selector: string,
-  elevation: HTMLObjectElement,
-): void {
+function showRackElements(selector: string, elevation: HTMLObjectElement): void {
   const elements = elevation.contentDocument?.querySelectorAll(selector) ?? [];
   for (const element of elements) {
     element.classList.remove('hidden');
   }
 }
 
-function hideRackElements(
-  selector: string,
-  elevation: HTMLObjectElement,
-): void {
+function hideRackElements(selector: string, elevation: HTMLObjectElement): void {
   const elements = elevation.contentDocument?.querySelectorAll(selector) ?? [];
   for (const element of elements) {
     element.classList.add('hidden');
@@ -68,21 +59,24 @@ function handleRackViewSelect(
  * Add change callback for selecting rack elevation images, and set
  * initial state of select and the images themselves
  */
-export function initRackElevation(): void {
+export function initRackElevation(base?: Element): void {
   const initialView = rackImagesState.get('view');
 
-  for (const control of getElements<HTMLSelectElement>('select.rack-view')) {
+  for (const control of getElements<HTMLSelectElement>('select.rack-view', { base })) {
     control.selectedIndex = [...control.options].findIndex(o => o.value == initialView);
     control.addEventListener(
       'change',
       event => {
-        handleRackViewSelect((event.currentTarget as any).value as RackViewSelection, rackImagesState);
+        handleRackViewSelect(
+          (event.currentTarget as HTMLSelectElement).value as RackViewSelection,
+          rackImagesState,
+        );
       },
       false,
     );
   }
 
-  for (const element of getElements<HTMLObjectElement>('.rack_elevation')) {
+  for (const element of getElements<HTMLObjectElement>('.rack_elevation', { base })) {
     element.addEventListener('load', () => {
       setRackView(initialView, element);
     });

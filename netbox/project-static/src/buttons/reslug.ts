@@ -17,14 +17,15 @@ function slugify(slug: string, chars: number): string {
 /**
  * If a slug field exists, add event listeners to handle automatically generating its value.
  */
-export function initReslug(): void {
-  const slugField = document.getElementById('id_slug') as HTMLInputElement;
-  const slugButton = document.getElementById('reslug') as HTMLButtonElement;
+export function initReslug(base: Element | Document = document): void {
+  const slugField = base.querySelector('#id_slug') as HTMLInputElement;
+  const slugButton = base.querySelector('#reslug') as HTMLButtonElement;
   if (slugField === null || slugButton === null) {
     return;
   }
+
   const sourceId = slugField.getAttribute('slug-source');
-  const sourceField = document.getElementById(`id_${sourceId}`) as HTMLInputElement;
+  const sourceField = base.querySelector(`#id_${sourceId}`) as HTMLInputElement;
 
   if (sourceField === null) {
     console.error('Unable to find field for slug field.');

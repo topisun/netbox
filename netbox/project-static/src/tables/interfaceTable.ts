@@ -284,8 +284,8 @@ class TableState {
 /**
  * Initialize table states.
  */
-export function initInterfaceTable(): void {
-  for (const element of getElements<HTMLTableElement>('table')) {
+export function initInterfaceTable(base?: Element): void {
+  for (const element of getElements<HTMLTableElement>('table', { base })) {
     new TableState(element);
   }
 }

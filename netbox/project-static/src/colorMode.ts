@@ -126,7 +126,7 @@ function initColorModeToggle(): void {
 /**
  * Initialize all color mode elements.
  */
-export function initColorMode(): void {
+export function initColorMode(_?: Element): void {
   window.addEventListener('load', defaultColorMode);
   for (const func of [initColorModeToggle]) {
     func();

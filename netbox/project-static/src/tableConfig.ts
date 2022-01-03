@@ -53,7 +53,10 @@ function removeColumns(event: Event): void {
 /**
  * Submit form configuration to the NetBox API.
  */
-async function submitFormConfig(url: string, formConfig: Dict<Dict>): Promise<APIResponse<APIUserConfig>> {
+async function submitFormConfig(
+  url: string,
+  formConfig: Dict<Dict>,
+): Promise<APIResponse<APIUserConfig>> {
   return await apiPatch<APIUserConfig>(url, formConfig);
 }
 
@@ -70,9 +73,9 @@ function handleSubmit(event: Event): void {
   const url = element.getAttribute('data-url');
   if (url == null) {
     const toast = createToast(
-        'danger',
-        'Error Updating Table Configuration',
-        'No API path defined for configuration form.'
+      'danger',
+      'Error Updating Table Configuration',
+      'No API path defined for configuration form.',
     );
     toast.show();
     return;
@@ -108,20 +111,20 @@ function handleSubmit(event: Event): void {
 /**
  * Initialize table configuration elements.
  */
-export function initTableConfig(): void {
-  for (const element of getElements<HTMLButtonElement>('#save_tableconfig')) {
+export function initTableConfig(base?: Element): void {
+  for (const element of getElements<HTMLButtonElement>('#save_tableconfig', { base })) {
     element.addEventListener('click', saveTableConfig);
   }
-  for (const element of getElements<HTMLButtonElement>('#reset_tableconfig')) {
+  for (const element of getElements<HTMLButtonElement>('#reset_tableconfig', { base })) {
     element.addEventListener('click', resetTableConfig);
   }
-  for (const element of getElements<HTMLButtonElement>('#add_columns')) {
+  for (const element of getElements<HTMLButtonElement>('#add_columns', { base })) {
     element.addEventListener('click', addColumns);
   }
-  for (const element of getElements<HTMLButtonElement>('#remove_columns')) {
+  for (const element of getElements<HTMLButtonElement>('#remove_columns', { base })) {
     element.addEventListener('click', removeColumns);
   }
-  for (const element of getElements<HTMLFormElement>('form.userconfigform')) {
+  for (const element of getElements<HTMLFormElement>('form.userconfigform', { base })) {
     element.addEventListener('submit', handleSubmit);
   }
 }

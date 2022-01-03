@@ -60,8 +60,8 @@ function handleFormSubmit(event: Event, form: HTMLFormElement): void {
 /**
  * Attach event listeners to form buttons with the `return-url` attribute present.
  */
-function initReturnUrlSubmitButtons(): void {
-  for (const button of getElements<HTMLButtonElement>('button[return-url]')) {
+function initReturnUrlSubmitButtons(base?: Element): void {
+  for (const button of getElements<HTMLButtonElement>('button[return-url]', { base })) {
     button.addEventListener('click', handleSubmitWithReturnUrl);
   }
 }
@@ -71,8 +71,8 @@ function initReturnUrlSubmitButtons(): void {
  * callback checks the validity of each form field and adds the appropriate Bootstrap CSS class
  * based on the field's validity.
  */
-export function initFormElements(): void {
-  for (const form of getElements('form')) {
+export function initFormElements(base?: Element): void {
+  for (const form of getElements('form', { base })) {
     // Find each of the form's submitters. Most object edit forms have a "Create" and
     // a "Create & Add", so we need to add a listener to both.
     const submitters = form.querySelectorAll<HTMLButtonElement>('button[type=submit]');
@@ -82,5 +82,5 @@ export function initFormElements(): void {
       submitter.addEventListener('click', (event: Event) => handleFormSubmit(event, form));
     }
   }
-  initReturnUrlSubmitButtons();
+  initReturnUrlSubmitButtons(base);
 }

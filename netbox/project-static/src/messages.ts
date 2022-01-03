@@ -3,7 +3,7 @@ import { Toast } from 'bootstrap';
 /**
  * Find any active messages from django.contrib.messages and show them in a toast.
  */
-export function initMessages(): void {
+export function initMessages(_?: Element): void {
   const elements = document.querySelectorAll<HTMLDivElement>(
     'body > div#django-messages > div.django-message.toast',
   );

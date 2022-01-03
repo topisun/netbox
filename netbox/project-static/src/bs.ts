@@ -190,7 +190,7 @@ function initImagePreview(): void {
  *
  * @see https://getbootstrap.com/docs/5.0/components/tooltips
  */
-export function initBootstrap(): void {
+export function initBootstrap(_?: Element): void {
   for (const func of [
     initTooltips,
     initModals,

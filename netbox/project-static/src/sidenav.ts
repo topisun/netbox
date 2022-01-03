@@ -308,7 +308,7 @@ class SideNav {
   }
 }
 
-export function initSideNav(): void {
+export function initSideNav(_?: Element): void {
   for (const sidenav of getElements<HTMLDivElement>('.sidenav')) {
     new SideNav(sidenav);
   }

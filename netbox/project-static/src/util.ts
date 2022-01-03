@@ -14,6 +14,22 @@ type InferredProps<
   E extends HTMLElementTagNameMap[T] = HTMLElementTagNameMap[T],
 > = Partial<Record<keyof E, E[keyof E]>>;
 
+interface GetElementsOptions {
+  base?: Element;
+}
+
+type HTMLSelector = keyof HTMLElementTagNameMap;
+type SVGSelector = keyof SVGElementTagNameMap;
+
+type GetElementArgs<K extends string | HTMLSelector | SVGSelector | Element> =
+  (K extends HTMLSelector
+    ? K | GetElementsOptions
+    : K extends SVGSelector
+    ? K | GetElementsOptions
+    : K extends string
+    ? K | GetElementsOptions
+    : never)[];
+
 export function isApiError(data: Record<string, unknown>): data is APIError {
   return 'error' in data && 'exception' in data;
 }
@@ -166,18 +182,24 @@ export async function getApiData<T extends APIObjectBase>(
   return await apiGetBase<APIAnswer<T>>(url);
 }
 
-export function getElements<K extends keyof SVGElementTagNameMap>(
-  ...key: K[]
+export function getElements<K extends SVGSelector>(
+  ...key: GetElementArgs<K>
 ): Generator<SVGElementTagNameMap[K]>;
-export function getElements<K extends keyof HTMLElementTagNameMap>(
-  ...key: K[]
+export function getElements<K extends HTMLSelector>(
+  ...key: GetElementArgs<K>
 ): Generator<HTMLElementTagNameMap[K]>;
-export function getElements<E extends Element>(...key: string[]): Generator<E>;
+export function getElements<E extends Element>(...key: GetElementArgs<string>): Generator<E>;
 export function* getElements(
-  ...key: (string | keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap)[]
+  ...key: GetElementArgs<string | HTMLSelector | SVGSelector>
 ): Generator<Element> {
-  for (const query of key) {
-    for (const element of document.querySelectorAll(query)) {
+  const objs = key.filter(
+    (k: string | GetElementsOptions): k is GetElementsOptions => typeof k !== 'string',
+  );
+  const keys = key.filter((k): k is string => typeof k === 'string');
+  const { base = document } = objs[objs.length - 1] ?? {};
+
+  for (const query of keys) {
+    for (const element of base.querySelectorAll(query)) {
       if (element !== null) {
         yield element;
       }

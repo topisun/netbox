@@ -45,8 +45,8 @@ function toggleConnection(element: HTMLButtonElement): void {
   }
 }
 
-export function initConnectionToggle(): void {
-  for (const element of getElements<HTMLButtonElement>('button.cable-toggle')) {
+export function initConnectionToggle(base?: Element): void {
+  for (const element of getElements<HTMLButtonElement>('button.cable-toggle', { base })) {
     element.addEventListener('click', () => toggleConnection(element));
   }
 }

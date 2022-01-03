@@ -39,8 +39,8 @@ function styleContainer(
  * Initialize color selection widget. Dynamically change the style of the select container to match
  * the selected option.
  */
-export function initColorSelect(): void {
-  for (const select of getElements<HTMLSelectElement>('select.netbox-color-select')) {
+export function initColorSelect(base?: Element): void {
+  for (const select of getElements<HTMLSelectElement>('select.netbox-color-select', { base })) {
     for (const option of select.options) {
       if (canChangeColor(option)) {
         // Get the background color from the option's value.

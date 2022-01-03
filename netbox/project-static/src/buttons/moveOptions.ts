@@ -41,19 +41,19 @@ function moveOptionDown(element: HTMLSelectElement): void {
 /**
  * Initialize move up/down buttons.
  */
-export function initMoveButtons(): void {
-  for (const button of getElements<HTMLButtonElement>('#move-option-up')) {
+export function initMoveButtons(base?: Element): void {
+  for (const button of getElements<HTMLButtonElement>('#move-option-up', { base })) {
     const target = button.getAttribute('data-target');
     if (target !== null) {
-      for (const select of getElements<HTMLSelectElement>(`#${target}`)) {
+      for (const select of getElements<HTMLSelectElement>(`#${target}`, { base })) {
         button.addEventListener('click', () => moveOptionUp(select));
       }
     }
   }
-  for (const button of getElements<HTMLButtonElement>('#move-option-down')) {
+  for (const button of getElements<HTMLButtonElement>('#move-option-down', { base })) {
     const target = button.getAttribute('data-target');
     if (target !== null) {
-      for (const select of getElements<HTMLSelectElement>(`#${target}`)) {
+      for (const select of getElements<HTMLSelectElement>(`#${target}`, { base })) {
         button.addEventListener('click', () => moveOptionDown(select));
       }
     }

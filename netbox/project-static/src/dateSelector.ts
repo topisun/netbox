@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 
-export function initDateSelector(): void {
+export function initDateSelector(_?: Element): void {
   flatpickr('.date-picker', { allowInput: true });
   flatpickr('.datetime-picker', {
     allowInput: true,

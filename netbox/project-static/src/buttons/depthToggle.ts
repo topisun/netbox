@@ -56,10 +56,10 @@ function handleDepthToggle(state: StateManager<ObjectDepthState>, button: HTMLBu
 /**
  * Initialize object depth toggle buttons.
  */
-export function initDepthToggle(): void {
+export function initDepthToggle(base?: Element): void {
   const initiallyHidden = objectDepthState.get('hidden');
 
-  for (const button of getElements<HTMLButtonElement>('button.toggle-depth')) {
+  for (const button of getElements<HTMLButtonElement>('button.toggle-depth', { base })) {
     toggleDepthButton(initiallyHidden, button);
 
     button.addEventListener(
