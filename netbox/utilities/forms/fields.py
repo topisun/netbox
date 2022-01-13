@@ -12,7 +12,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Count, Q
 from django.forms import BoundField
 from django.forms.fields import JSONField as _JSONField, InvalidJSONInput
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from utilities.choices import unpack_grouped_choices
 from utilities.utils import content_type_identifier, content_type_name
@@ -412,20 +412,25 @@ class DynamicModelChoiceMixin:
     filter = django_filters.ModelChoiceFilter
     widget = widgets.APISelect
 
-    def __init__(self, query_params=None, initial_params=None, null_option=None, disabled_indicator=None,
-                 fetch_trigger=None, empty_label=None, *args, **kwargs):
+    def __init__(self, queryset, *, query_params=None, initial_params=None, null_option=None, disabled_indicator=None,
+                 fetch_trigger=None, empty_label=None, quick_add=False, **kwargs):
         self.query_params = query_params or {}
         self.initial_params = initial_params or {}
         self.null_option = null_option
         self.disabled_indicator = disabled_indicator
         self.fetch_trigger = fetch_trigger
+        self.add_url = None
 
         # to_field_name is set by ModelChoiceField.__init__(), but we need to set it early for reference
         # by widget_attrs()
         self.to_field_name = kwargs.get('to_field_name')
         self.empty_option = empty_label or ""
 
-        super().__init__(*args, **kwargs)
+        if quick_add:
+            model = queryset.model
+            self.add_url = f'{model._meta.app_label}:{model._meta.model_name}_add'
+
+        super().__init__(queryset, **kwargs)
 
     def widget_attrs(self, widget):
         attrs = {
@@ -444,9 +449,13 @@ class DynamicModelChoiceMixin:
         if self.disabled_indicator is not None:
             attrs['disabled-indicator'] = self.disabled_indicator
 
-        # Set the fetch trigger, if any.
+        # Set the fetch trigger, if any
         if self.fetch_trigger is not None:
             attrs['data-fetch-trigger'] = self.fetch_trigger
+
+        # Specify the URL of the creation form, if enabled
+        if self.add_url:
+            attrs['add_url'] = reverse_lazy(self.add_url)
 
         # Attach any static query parameters
         if (len(self.query_params) > 0):
@@ -497,7 +506,6 @@ class DynamicModelChoiceField(DynamicModelChoiceMixin, forms.ModelChoiceField):
     Override get_bound_field() to avoid pre-populating field choices with a SQL query. The field will be
     rendered only with choices set via bound data. Choices are populated on-demand via the APISelect widget.
     """
-
     def clean(self, value):
         """
         When null option is enabled and "None" is sent as part of a form to be submitted, it is sent as the

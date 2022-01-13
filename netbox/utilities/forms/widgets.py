@@ -10,7 +10,6 @@ from .utils import add_blank_choice, parse_numeric_range
 
 __all__ = (
     'APISelect',
-    'APISelectWithAdd',
     'APISelectMultiple',
     'BulkEditNullBooleanSelect',
     'ClearableFileInput',
@@ -134,17 +133,16 @@ class ClearableFileInput(forms.ClearableFileInput):
     template_name = 'widgets/clearable_file_input.html'
 
 
-class APISelect(SelectWithDisabled):
+class APISelectMixin:
     """
     A select widget populated via an API call
 
     :param api_url: API endpoint URL. Required if not set automatically by the parent field.
     """
-
     dynamic_params: Dict[str, str]
     static_params: Dict[str, List[str]]
 
-    def __init__(self, api_url=None, full=False, *args, **kwargs):
+    def __init__(self, api_url=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.attrs['class'] = 'netbox-api-select'
@@ -275,11 +273,12 @@ class APISelect(SelectWithDisabled):
         self.add_query_params({key: value})
 
 
-class APISelectWithAdd(APISelect):
-    template_name = 'widgets/apiselect_with_add.html'
+class APISelect(APISelectMixin, SelectWithDisabled):
+    template_name = 'widgets/apiselect.html'
 
 
-class APISelectMultiple(APISelect, forms.SelectMultiple):
+class APISelectMultiple(APISelectMixin, forms.SelectMultiple):
+    template_name = 'widgets/apiselect.html'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
