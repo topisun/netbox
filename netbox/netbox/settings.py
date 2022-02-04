@@ -80,6 +80,7 @@ if BASE_PATH:
 CORS_ORIGIN_ALLOW_ALL = getattr(configuration, 'CORS_ORIGIN_ALLOW_ALL', False)
 CORS_ORIGIN_REGEX_WHITELIST = getattr(configuration, 'CORS_ORIGIN_REGEX_WHITELIST', [])
 CORS_ORIGIN_WHITELIST = getattr(configuration, 'CORS_ORIGIN_WHITELIST', [])
+CSRF_TRUSTED_ORIGINS = getattr(configuration, 'CSRF_TRUSTED_ORIGINS', [])
 DATE_FORMAT = getattr(configuration, 'DATE_FORMAT', 'N j, Y')
 DATETIME_FORMAT = getattr(configuration, 'DATETIME_FORMAT', 'N j, Y g:i a')
 DEBUG = getattr(configuration, 'DEBUG', False)
@@ -404,9 +405,7 @@ MESSAGE_TAGS = {
 LOGIN_URL = f'/{BASE_PATH}login/'
 LOGIN_REDIRECT_URL = f'/{BASE_PATH}'
 
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
-
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Exclude potentially sensitive models from wildcard view exemption. These may still be exempted
 # by specifying the model individually in the EXEMPT_VIEW_PERMISSIONS configuration parameter.

@@ -2,14 +2,14 @@ from django.template import Context, Template
 from django.test import TestCase
 
 from dcim.models import Site
-from utilities.tables import BaseTable, TagColumn
+from netbox.tables import NetBoxTable, columns
 from utilities.testing import create_tags
 
 
-class TagColumnTable(BaseTable):
-    tags = TagColumn(url_name='dcim:site_list')
+class TagColumnTable(NetBoxTable):
+    tags = columns.TagColumn(url_name='dcim:site_list')
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = Site
         fields = ('pk', 'name', 'tags',)
         default_columns = fields

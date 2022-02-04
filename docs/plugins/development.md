@@ -1,5 +1,8 @@
 # Plugin Development
 
+!!! info "Help Improve the NetBox Plugins Framework!"
+    We're looking for volunteers to help improve NetBox's plugins framework. If you have experience developing plugins, we'd love to hear from you! You can find more information about this initiative [here](https://github.com/netbox-community/netbox/discussions/8338).
+
 This documentation covers the development of custom plugins for NetBox. Plugins are essentially self-contained [Django apps](https://docs.djangoproject.com/en/stable/) which integrate with NetBox to provide custom functionality. Since the development of Django apps is already very well-documented, we'll only be covering the aspects that are specific to NetBox.
 
 Plugins can do a lot, including:
@@ -48,7 +51,7 @@ The plugin source directory contains all the actual Python code and other resour
 
 ### Create setup.py
 
-`setup.py` is the [setup script](https://docs.python.org/3.8/distutils/setupscript.html) we'll use to install our plugin once it's finished. The primary function of this script is to call the setuptools library's `setup()` function to create a Python distribution package. We can pass a number of keyword arguments to inform the package creation as well as to provide metadata about the plugin. An example `setup.py` is below:
+`setup.py` is the [setup script](https://docs.python.org/3.7/distutils/setupscript.html) we'll use to install our plugin once it's finished. The primary function of this script is to call the setuptools library's `setup()` function to create a Python distribution package. We can pass a number of keyword arguments to inform the package creation as well as to provide metadata about the plugin. An example `setup.py` is below:
 
 ```python
 from setuptools import find_packages, setup
@@ -99,23 +102,22 @@ NetBox looks for the `config` variable within a plugin's `__init__.py` to load i
 
 #### PluginConfig Attributes
 
-| Name | Description                                                                                                   |
-| ---- |---------------------------------------------------------------------------------------------------------------|
-| `name` | Raw plugin name; same as the plugin's source directory                                                        |
-| `verbose_name` | Human-friendly name for the plugin                                                                            |
-| `version` | Current release ([semantic versioning](https://semver.org/) is encouraged)                                    |
-| `description` | Brief description of the plugin's purpose                                                                     |
-| `author` | Name of plugin's author                                                                                       |
-| `author_email` | Author's public email address                                                                                 |
-| `base_url` | Base path to use for plugin URLs (optional). If not specified, the project's `name` will be used.             |
-| `required_settings` | A list of any configuration parameters that **must** be defined by the user                                   |
-| `default_settings` | A dictionary of configuration parameters and their default values                                             |
-| `min_version` | Minimum version of NetBox with which the plugin is compatible                                                 |
-| `max_version` | Maximum version of NetBox with which the plugin is compatible                                                 |
-| `middleware` | A list of middleware classes to append after NetBox's build-in middleware                                     |
-| `template_extensions` | The dotted path to the list of template extension classes (default: `template_content.template_extensions`)   |
-| `menu_items` | The dotted path to the list of menu items provided by the plugin (default: `navigation.menu_items`)           |
-| `user_preferences` | The dotted path to the dictionary mapping of user preferences defined by the plugin (default: `preferences.preferences`) |
+| Name | Description |
+| ---- | ----------- |
+| `name` | Raw plugin name; same as the plugin's source directory |
+| `verbose_name` | Human-friendly name for the plugin |
+| `version` | Current release ([semantic versioning](https://semver.org/) is encouraged) |
+| `description` | Brief description of the plugin's purpose |
+| `author` | Name of plugin's author |
+| `author_email` | Author's public email address |
+| `base_url` | Base path to use for plugin URLs (optional). If not specified, the project's `name` will be used. |
+| `required_settings` | A list of any configuration parameters that **must** be defined by the user |
+| `default_settings` | A dictionary of configuration parameters and their default values |
+| `min_version` | Minimum version of NetBox with which the plugin is compatible |
+| `max_version` | Maximum version of NetBox with which the plugin is compatible |
+| `middleware` | A list of middleware classes to append after NetBox's build-in middleware |
+| `template_extensions` | The dotted path to the list of template extension classes (default: `template_content.template_extensions`) |
+| `menu_items` | The dotted path to the list of menu items provided by the plugin (default: `navigation.menu_items`) |
 
 All required settings must be configured by the user. If a configuration parameter is listed in both `required_settings` and `default_settings`, the default setting will be ignored.
 
@@ -130,7 +132,7 @@ python3 -m venv /path/to/my/venv
 You can make NetBox available within this environment by creating a path file pointing to its location. This will add NetBox to the Python path upon activation. (Be sure to adjust the command below to specify your actual virtual environment path, Python version, and NetBox installation.)
 
 ```shell
-cd $VENV/lib/python3.8/site-packages/
+cd $VENV/lib/python3.7/site-packages/
 echo /opt/netbox/netbox > netbox.pth
 ```
 

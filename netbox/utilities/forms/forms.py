@@ -3,7 +3,6 @@ import re
 
 import yaml
 from django import forms
-from django.utils.translation import gettext as _
 
 from .widgets import APISelect, APISelectMultiple, ClearableFileInput, StaticSelect
 
@@ -20,6 +19,10 @@ __all__ = (
     'TableConfigForm',
 )
 
+
+#
+# Mixins
+#
 
 class BootstrapMixin:
     """
@@ -61,6 +64,10 @@ class BootstrapMixin:
                 field.widget.attrs['class'] = ' '.join((css, 'form-select')).strip()
 
 
+#
+# Form classes
+#
+
 class ReturnURLForm(forms.Form):
     """
     Provides a hidden return URL field to control where the user is directed after the form is submitted.
@@ -77,17 +84,9 @@ class ConfirmationForm(BootstrapMixin, ReturnURLForm):
 
 class BulkEditForm(BootstrapMixin, forms.Form):
     """
-    Base form for editing multiple objects in bulk
+    Provides bulk edit support for objects.
     """
-
-    def __init__(self, model, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.model = model
-        self.nullable_fields = []
-
-        # Copy any nullable fields defined in Meta
-        if hasattr(self.Meta, 'nullable_fields'):
-            self.nullable_fields = self.Meta.nullable_fields
+    nullable_fields = ()
 
 
 class BulkRenameForm(BootstrapMixin, forms.Form):
@@ -185,10 +184,7 @@ class FilterForm(BootstrapMixin, forms.Form):
     """
     q = forms.CharField(
         required=False,
-        widget=forms.TextInput(
-            attrs={'placeholder': _('All fields')}
-        ),
-        label=_('Search')
+        label='Search'
     )
 
 

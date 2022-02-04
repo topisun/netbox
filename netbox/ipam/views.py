@@ -8,7 +8,7 @@ from dcim.filtersets import InterfaceFilterSet
 from dcim.models import Interface, Site
 from dcim.tables import SiteTable
 from netbox.views import generic
-from utilities.tables import configure_table
+from netbox.tables import configure_table
 from utilities.utils import count_related
 from virtualization.filtersets import VMInterfaceFilterSet
 from virtualization.models import VMInterface
@@ -340,6 +340,7 @@ class AggregateBulkDeleteView(generic.BulkDeleteView):
 class RoleListView(generic.ObjectListView):
     queryset = Role.objects.annotate(
         prefix_count=count_related(Prefix, 'role'),
+        iprange_count=count_related(IPRange, 'role'),
         vlan_count=count_related(VLAN, 'role')
     )
     filterset = filtersets.RoleFilterSet

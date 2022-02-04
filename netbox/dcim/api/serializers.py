@@ -221,7 +221,7 @@ class RackReservationSerializer(PrimaryModelSerializer):
     class Meta:
         model = RackReservation
         fields = [
-            'id', 'url', 'display', 'rack', 'units', 'created', 'user', 'tenant', 'description', 'tags',
+            'id', 'url', 'display', 'rack', 'units', 'created', 'last_updated', 'user', 'tenant', 'description', 'tags',
             'custom_fields',
         ]
 
@@ -721,8 +721,9 @@ class InterfaceSerializer(PrimaryModelSerializer, LinkTerminationSerializer, Con
     bridge = NestedInterfaceSerializer(required=False, allow_null=True)
     lag = NestedInterfaceSerializer(required=False, allow_null=True)
     mode = ChoiceField(choices=InterfaceModeChoices, allow_blank=True, required=False)
+    duplex = ChoiceField(choices=InterfaceDuplexChoices, allow_blank=True, required=False)
     rf_role = ChoiceField(choices=WirelessRoleChoices, required=False, allow_null=True)
-    rf_channel = ChoiceField(choices=WirelessChannelChoices, required=False)
+    rf_channel = ChoiceField(choices=WirelessChannelChoices, required=False, allow_blank=True)
     untagged_vlan = NestedVLANSerializer(required=False, allow_null=True)
     tagged_vlans = SerializedPKRelatedField(
         queryset=VLAN.objects.all(),
@@ -746,7 +747,7 @@ class InterfaceSerializer(PrimaryModelSerializer, LinkTerminationSerializer, Con
         model = Interface
         fields = [
             'id', 'url', 'display', 'device', 'module', 'name', 'label', 'type', 'enabled', 'parent', 'bridge', 'lag',
-            'mtu', 'mac_address', 'wwn', 'mgmt_only', 'description', 'mode', 'rf_role', 'rf_channel',
+            'mtu', 'mac_address', 'speed', 'duplex', 'wwn', 'mgmt_only', 'description', 'mode', 'rf_role', 'rf_channel',
             'rf_channel_frequency', 'rf_channel_width', 'tx_power', 'untagged_vlan', 'tagged_vlans', 'mark_connected',
             'cable', 'wireless_link', 'link_peer', 'link_peer_type', 'wireless_lans', 'vrf', 'connected_endpoint',
             'connected_endpoint_type', 'connected_endpoint_reachable', 'tags', 'custom_fields', 'created',
@@ -913,7 +914,7 @@ class CableSerializer(PrimaryModelSerializer):
         fields = [
             'id', 'url', 'display', 'termination_a_type', 'termination_a_id', 'termination_a', 'termination_b_type',
             'termination_b_id', 'termination_b', 'type', 'status', 'tenant', 'label', 'color', 'length', 'length_unit',
-            'tags', 'custom_fields',
+            'tags', 'custom_fields', 'created', 'last_updated',
         ]
 
     def _get_termination(self, obj, side):
@@ -1007,7 +1008,10 @@ class VirtualChassisSerializer(PrimaryModelSerializer):
 
     class Meta:
         model = VirtualChassis
-        fields = ['id', 'url', 'display', 'name', 'domain', 'master', 'tags', 'custom_fields', 'member_count']
+        fields = [
+            'id', 'url', 'display', 'name', 'domain', 'master', 'tags', 'custom_fields', 'member_count',
+            'created', 'last_updated',
+        ]
 
 
 #
@@ -1026,7 +1030,10 @@ class PowerPanelSerializer(PrimaryModelSerializer):
 
     class Meta:
         model = PowerPanel
-        fields = ['id', 'url', 'display', 'site', 'location', 'name', 'tags', 'custom_fields', 'powerfeed_count']
+        fields = [
+            'id', 'url', 'display', 'site', 'location', 'name', 'tags', 'custom_fields', 'powerfeed_count',
+            'created', 'last_updated',
+        ]
 
 
 class PowerFeedSerializer(PrimaryModelSerializer, LinkTerminationSerializer, ConnectedEndpointSerializer):

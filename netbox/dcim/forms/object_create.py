@@ -1,13 +1,14 @@
 from django import forms
 
 from dcim.models import *
-from extras.forms import CustomFieldModelForm
 from extras.models import Tag
+from netbox.forms import NetBoxModelForm
 from utilities.forms import (
     BootstrapMixin, DynamicModelChoiceField, DynamicModelMultipleChoiceField, ExpandableNameField,
 )
 
 __all__ = (
+    'ComponentTemplateCreateForm',
     'DeviceComponentCreateForm',
     'DeviceTypeComponentCreateForm',
     'FrontPortCreateForm',
@@ -49,6 +50,18 @@ class DeviceTypeComponentCreateForm(ComponentCreateForm):
         queryset=DeviceType.objects.all(),
     )
     field_order = ('device_type', 'name_pattern', 'label_pattern')
+
+
+class ComponentTemplateCreateForm(ComponentCreateForm):
+    device_type = DynamicModelChoiceField(
+        queryset=DeviceType.objects.all(),
+        required=False
+    )
+    module_type = DynamicModelChoiceField(
+        queryset=ModuleType.objects.all(),
+        required=False
+    )
+    field_order = ('device_type', 'module_type', 'name_pattern', 'label_pattern')
 
 
 class DeviceComponentCreateForm(ComponentCreateForm):
@@ -149,7 +162,7 @@ class FrontPortCreateForm(DeviceComponentCreateForm):
         }
 
 
-class VirtualChassisCreateForm(CustomFieldModelForm):
+class VirtualChassisCreateForm(NetBoxModelForm):
     region = DynamicModelChoiceField(
         queryset=Region.objects.all(),
         required=False,

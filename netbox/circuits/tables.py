@@ -1,10 +1,9 @@
 import django_tables2 as tables
 from django_tables2.utils import Accessor
 
+from netbox.tables import NetBoxTable, columns
 from tenancy.tables import TenantColumn
-from utilities.tables import BaseTable, ChoiceFieldColumn, MarkdownColumn, TagColumn, ToggleColumn
 from .models import *
-
 
 __all__ = (
     'CircuitTable',
@@ -22,10 +21,10 @@ CIRCUITTERMINATION_LINK = """
 {% endif %}
 """
 
+
 #
 # Table columns
 #
-
 
 class CommitRateColumn(tables.TemplateColumn):
     """
@@ -43,13 +42,12 @@ class CommitRateColumn(tables.TemplateColumn):
     def value(self, value):
         return str(value) if value else None
 
+
 #
 # Providers
 #
 
-
-class ProviderTable(BaseTable):
-    pk = ToggleColumn()
+class ProviderTable(NetBoxTable):
     name = tables.Column(
         linkify=True
     )
@@ -57,16 +55,16 @@ class ProviderTable(BaseTable):
         accessor=Accessor('count_circuits'),
         verbose_name='Circuits'
     )
-    comments = MarkdownColumn()
-    tags = TagColumn(
+    comments = columns.MarkdownColumn()
+    tags = columns.TagColumn(
         url_name='circuits:provider_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = Provider
         fields = (
             'pk', 'id', 'name', 'asn', 'account', 'portal_url', 'noc_contact', 'admin_contact', 'circuit_count',
-            'comments', 'tags',
+            'comments', 'tags', 'created', 'last_updated',
         )
         default_columns = ('pk', 'name', 'asn', 'account', 'circuit_count')
 
@@ -75,22 +73,23 @@ class ProviderTable(BaseTable):
 # Provider networks
 #
 
-class ProviderNetworkTable(BaseTable):
-    pk = ToggleColumn()
+class ProviderNetworkTable(NetBoxTable):
     name = tables.Column(
         linkify=True
     )
     provider = tables.Column(
         linkify=True
     )
-    comments = MarkdownColumn()
-    tags = TagColumn(
+    comments = columns.MarkdownColumn()
+    tags = columns.TagColumn(
         url_name='circuits:providernetwork_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = ProviderNetwork
-        fields = ('pk', 'id', 'name', 'provider', 'service_id', 'description', 'comments', 'tags')
+        fields = (
+            'pk', 'id', 'name', 'provider', 'service_id', 'description', 'comments', 'created', 'last_updated', 'tags',
+        )
         default_columns = ('pk', 'name', 'provider', 'service_id', 'description')
 
 
@@ -98,21 +97,22 @@ class ProviderNetworkTable(BaseTable):
 # Circuit types
 #
 
-class CircuitTypeTable(BaseTable):
-    pk = ToggleColumn()
+class CircuitTypeTable(NetBoxTable):
     name = tables.Column(
         linkify=True
     )
-    tags = TagColumn(
+    tags = columns.TagColumn(
         url_name='circuits:circuittype_list'
     )
     circuit_count = tables.Column(
         verbose_name='Circuits'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = CircuitType
-        fields = ('pk', 'id', 'name', 'circuit_count', 'description', 'slug', 'tags', 'actions')
+        fields = (
+            'pk', 'id', 'name', 'circuit_count', 'description', 'slug', 'tags', 'created', 'last_updated', 'actions',
+        )
         default_columns = ('pk', 'name', 'circuit_count', 'description', 'slug')
 
 
@@ -120,8 +120,7 @@ class CircuitTypeTable(BaseTable):
 # Circuits
 #
 
-class CircuitTable(BaseTable):
-    pk = ToggleColumn()
+class CircuitTable(NetBoxTable):
     cid = tables.Column(
         linkify=True,
         verbose_name='Circuit ID'
@@ -129,7 +128,7 @@ class CircuitTable(BaseTable):
     provider = tables.Column(
         linkify=True
     )
-    status = ChoiceFieldColumn()
+    status = columns.ChoiceFieldColumn()
     tenant = TenantColumn()
     termination_a = tables.TemplateColumn(
         template_code=CIRCUITTERMINATION_LINK,
@@ -140,16 +139,16 @@ class CircuitTable(BaseTable):
         verbose_name='Side Z'
     )
     commit_rate = CommitRateColumn()
-    comments = MarkdownColumn()
-    tags = TagColumn(
+    comments = columns.MarkdownColumn()
+    tags = columns.TagColumn(
         url_name='circuits:circuit_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = Circuit
         fields = (
             'pk', 'id', 'cid', 'provider', 'type', 'status', 'tenant', 'termination_a', 'termination_z', 'install_date',
-            'commit_rate', 'description', 'comments', 'tags',
+            'commit_rate', 'description', 'comments', 'tags', 'created', 'last_updated',
         )
         default_columns = (
             'pk', 'cid', 'provider', 'type', 'status', 'tenant', 'termination_a', 'termination_z', 'description',

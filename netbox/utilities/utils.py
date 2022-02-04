@@ -1,9 +1,8 @@
 import datetime
 import json
-import urllib
 from collections import OrderedDict
+from decimal import Decimal
 from itertools import count, groupby
-from typing import Any, Dict, List, Tuple
 
 from django.core.serializers import serialize
 from django.db.models import Count, OuterRef, Subquery
@@ -13,8 +12,18 @@ from jinja2.sandbox import SandboxedEnvironment
 from mptt.models import MPTTModel
 
 from dcim.choices import CableLengthUnitChoices
+from extras.plugins import PluginConfig
 from extras.utils import is_taggable
 from utilities.constants import HTTP_REQUEST_META_SAFE_COPY
+
+
+def resolve_namespace(instance):
+    """
+    Get the appropriate namepsace for the app based on whether it is a Plugin or base application
+    """
+    if isinstance(instance._meta.app_config, PluginConfig):
+        return f'plugins:{instance._meta.app_label}'
+    return f'{instance._meta.app_label}'
 
 
 def csv_format(data):
@@ -195,15 +204,15 @@ def to_meters(length, unit):
     """
     Convert the given length to meters.
     """
-    length = int(length)
-    if length < 0:
-        raise ValueError("Length must be a positive integer")
+    try:
+        if length < 0:
+            raise ValueError("Length must be a positive number")
+    except TypeError:
+        raise TypeError(f"Invalid value '{length}' for length (must be a number)")
 
     valid_units = CableLengthUnitChoices.values()
     if unit not in valid_units:
-        raise ValueError(
-            "Unknown unit {}. Must be one of the following: {}".format(unit, ', '.join(valid_units))
-        )
+        raise ValueError(f"Unknown unit {unit}. Must be one of the following: {', '.join(valid_units)}")
 
     if unit == CableLengthUnitChoices.UNIT_KILOMETER:
         return length * 1000
@@ -212,11 +221,11 @@ def to_meters(length, unit):
     if unit == CableLengthUnitChoices.UNIT_CENTIMETER:
         return length / 100
     if unit == CableLengthUnitChoices.UNIT_MILE:
-        return length * 1609.344
+        return length * Decimal(1609.344)
     if unit == CableLengthUnitChoices.UNIT_FOOT:
-        return length * 0.3048
+        return length * Decimal(0.3048)
     if unit == CableLengthUnitChoices.UNIT_INCH:
-        return length * 0.3048 * 12
+        return length * Decimal(0.3048) * 12
     raise ValueError(f"Unknown unit {unit}. Must be 'km', 'm', 'cm', 'mi', 'ft', or 'in'.")
 
 

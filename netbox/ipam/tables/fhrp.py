@@ -1,7 +1,7 @@
 import django_tables2 as tables
 
-from utilities.tables import ActionsColumn, BaseTable, MarkdownColumn, TagColumn, ToggleColumn
 from ipam.models import *
+from netbox.tables import NetBoxTable, columns
 
 __all__ = (
     'FHRPGroupTable',
@@ -16,12 +16,11 @@ IPADDRESSES = """
 """
 
 
-class FHRPGroupTable(BaseTable):
-    pk = ToggleColumn()
+class FHRPGroupTable(NetBoxTable):
     group_id = tables.Column(
         linkify=True
     )
-    comments = MarkdownColumn()
+    comments = columns.MarkdownColumn()
     ip_addresses = tables.TemplateColumn(
         template_code=IPADDRESSES,
         orderable=False,
@@ -30,23 +29,22 @@ class FHRPGroupTable(BaseTable):
     interface_count = tables.Column(
         verbose_name='Interfaces'
     )
-    tags = TagColumn(
+    tags = columns.TagColumn(
         url_name='ipam:fhrpgroup_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = FHRPGroup
         fields = (
             'pk', 'group_id', 'protocol', 'auth_type', 'auth_key', 'description', 'ip_addresses', 'interface_count',
-            'tags',
+            'tags', 'created', 'last_updated',
         )
         default_columns = ('pk', 'group_id', 'protocol', 'auth_type', 'description', 'ip_addresses', 'interface_count')
 
 
-class FHRPGroupAssignmentTable(BaseTable):
-    pk = ToggleColumn()
+class FHRPGroupAssignmentTable(NetBoxTable):
     interface_parent = tables.Column(
-        accessor=tables.A('interface.parent_object'),
+        accessor=tables.A('interface__parent_object'),
         linkify=True,
         orderable=False,
         verbose_name='Parent'
@@ -58,11 +56,11 @@ class FHRPGroupAssignmentTable(BaseTable):
     group = tables.Column(
         linkify=True
     )
-    actions = ActionsColumn(
+    actions = columns.ActionsColumn(
         sequence=('edit', 'delete')
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = FHRPGroupAssignment
         fields = ('pk', 'group', 'interface_parent', 'interface', 'priority')
         exclude = ('id',)

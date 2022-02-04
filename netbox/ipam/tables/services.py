@@ -1,7 +1,7 @@
 import django_tables2 as tables
 
-from utilities.tables import BaseTable, TagColumn, ToggleColumn
 from ipam.models import *
+from netbox.tables import NetBoxTable, columns
 
 __all__ = (
     'ServiceTable',
@@ -9,26 +9,24 @@ __all__ = (
 )
 
 
-class ServiceTemplateTable(BaseTable):
-    pk = ToggleColumn()
+class ServiceTemplateTable(NetBoxTable):
     name = tables.Column(
         linkify=True
     )
     ports = tables.Column(
         accessor=tables.A('port_list')
     )
-    tags = TagColumn(
+    tags = columns.TagColumn(
         url_name='ipam:servicetemplate_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = ServiceTemplate
         fields = ('pk', 'id', 'name', 'protocol', 'ports', 'description', 'tags')
         default_columns = ('pk', 'name', 'protocol', 'ports', 'description')
 
 
-class ServiceTable(BaseTable):
-    pk = ToggleColumn()
+class ServiceTable(NetBoxTable):
     name = tables.Column(
         linkify=True
     )
@@ -39,11 +37,14 @@ class ServiceTable(BaseTable):
     ports = tables.Column(
         accessor=tables.A('port_list')
     )
-    tags = TagColumn(
+    tags = columns.TagColumn(
         url_name='ipam:service_list'
     )
 
-    class Meta(BaseTable.Meta):
+    class Meta(NetBoxTable.Meta):
         model = Service
-        fields = ('pk', 'id', 'name', 'parent', 'protocol', 'ports', 'ipaddresses', 'description', 'tags')
+        fields = (
+            'pk', 'id', 'name', 'parent', 'protocol', 'ports', 'ipaddresses', 'description', 'tags', 'created',
+            'last_updated',
+        )
         default_columns = ('pk', 'name', 'parent', 'protocol', 'ports', 'description')

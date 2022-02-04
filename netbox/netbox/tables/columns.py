@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django_tables2.utils import Accessor
 
 from extras.choices import CustomFieldTypeChoices
-from utilities.utils import content_type_identifier, content_type_name
+from utilities.utils import content_type_identifier, content_type_name, resolve_namespace
 
 __all__ = (
     'ActionsColumn',
@@ -134,7 +134,7 @@ class ActionsColumn(tables.Column):
             return ''
 
         model = table.Meta.model
-        viewname_base = f'{model._meta.app_label}:{model._meta.model_name}'
+        viewname_base = f'{resolve_namespace(model)}:{model._meta.model_name}'
         request = getattr(table, 'context', {}).get('request')
         url_appendix = f'?return_url={request.path}' if request else ''
 
@@ -320,14 +320,24 @@ class CustomFieldColumn(tables.Column):
     def render(self, value):
         if isinstance(value, list):
             return ', '.join(v for v in value)
+        elif self.customfield.type == CustomFieldTypeChoices.TYPE_BOOLEAN and value is True:
+            return mark_safe('<i class="mdi mdi-check-bold text-success"></i>')
+        elif self.customfield.type == CustomFieldTypeChoices.TYPE_BOOLEAN and value is False:
+            return mark_safe('<i class="mdi mdi-close-thick text-danger"></i>')
         elif self.customfield.type == CustomFieldTypeChoices.TYPE_URL:
-            # Linkify custom URLs
             return mark_safe(f'<a href="{value}">{value}</a>')
         if value is not None:
             obj = self.customfield.deserialize(value)
             if hasattr(obj, 'get_absolute_url'):
                 return mark_safe(f'<a href="{obj.get_absolute_url}">{obj}</a>')
             return obj
+        return self.default
+
+    def value(self, value):
+        if isinstance(value, list):
+            return ','.join(v for v in value)
+        if value is not None:
+            return value
         return self.default
 
 

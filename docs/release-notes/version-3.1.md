@@ -1,16 +1,52 @@
 # NetBox v3.1
 
-## v3.1.6 (FUTURE)
+<<<<<<< HEAD
+## v3.1.7 (FUTURE)
+=======
+## v3.1.7 (2022-02-03)
+
+### Enhancements
+
+* [#7504](https://github.com/netbox-community/netbox/issues/7504) - Include IP range data under IPAM role views
+* [#8275](https://github.com/netbox-community/netbox/issues/8275) - Introduce alternative ASDOT-formatted column for ASNs
+* [#8367](https://github.com/netbox-community/netbox/issues/8367) - Add ASNs to global search function
+* [#8368](https://github.com/netbox-community/netbox/issues/8368) - Enable controlling the order of custom script form fields with `field_order`
+* [#8381](https://github.com/netbox-community/netbox/issues/8381) - Add contacts to global search function
+* [#8462](https://github.com/netbox-community/netbox/issues/8462) - Linkify manufacturer column in device type table
+* [#8476](https://github.com/netbox-community/netbox/issues/8476) - Bring the ASN Web UI up to the standard set by other objects
+* [#8494](https://github.com/netbox-community/netbox/issues/8494) - Include locations count under tenant view
+* [#8517](https://github.com/netbox-community/netbox/issues/8517) - Render boolean custom fields as icons in object tables
+* [#8530](https://github.com/netbox-community/netbox/issues/8530) - Indicate CSV or YAML as format for "all data" export
+
+### Bug Fixes
+
+* [#8315](https://github.com/netbox-community/netbox/issues/8315) - Fix display of NAT link for primary IPv4 address under device view
+* [#8377](https://github.com/netbox-community/netbox/issues/8377) - Fix calculation of absolute cable lengths when specified in fractional units
+* [#8425](https://github.com/netbox-community/netbox/issues/8425) - Fix exception when viewing change list/records with removed plugins
+* [#8456](https://github.com/netbox-community/netbox/issues/8456) - Fix redundant display of VRF RD in prefix view
+* [#8465](https://github.com/netbox-community/netbox/issues/8465) - Accept empty string values for Interface `rf_channel` in REST API
+* [#8498](https://github.com/netbox-community/netbox/issues/8498) - Fix display of selected content type filters in object list views
+* [#8499](https://github.com/netbox-community/netbox/issues/8499) - Content types REST API endpoint should not require model permission
+* [#8512](https://github.com/netbox-community/netbox/issues/8512) - Correct file permissions to allow execution of housekeeping script
+* [#8527](https://github.com/netbox-community/netbox/issues/8527) - Fix display of changelog retention period
+>>>>>>> develop
+
+---
+
+## v3.1.6 (2022-01-17)
 
 ### Enhancements
 
 * [#8246](https://github.com/netbox-community/netbox/issues/8246) - Show human-friendly values for commit rates in circuits table
 * [#8262](https://github.com/netbox-community/netbox/issues/8262) - Add cable count to tenant stats
 * [#8265](https://github.com/netbox-community/netbox/issues/8265) - Add Stackwise-n interface types
+* [#8293](https://github.com/netbox-community/netbox/issues/8293) - Show 4-byte ASNs in ASDOT notation
 * [#8302](https://github.com/netbox-community/netbox/issues/8302) - Linkify role column in device & VM tables
+* [#8337](https://github.com/netbox-community/netbox/issues/8337) - Enable sorting object tables by created & updated times
 
 ### Bug Fixes
 
+* [#8279](https://github.com/netbox-community/netbox/issues/8279) - Fix display of virtual chassis members in rack elevations
 * [#8285](https://github.com/netbox-community/netbox/issues/8285) - Fix `cluster_count` under tenant REST API serializer
 * [#8287](https://github.com/netbox-community/netbox/issues/8287) - Correct label in export template form
 * [#8301](https://github.com/netbox-community/netbox/issues/8301) - Fix delete button for various object children views
@@ -19,6 +55,9 @@
 * [#8314](https://github.com/netbox-community/netbox/issues/8314) - Prevent custom fields with default values from appearing as applied filters erroneously
 * [#8317](https://github.com/netbox-community/netbox/issues/8317) - Fix CSV import of multi-select custom field values
 * [#8319](https://github.com/netbox-community/netbox/issues/8319) - Custom URL fields should honor `ALLOWED_URL_SCHEMES` config parameter
+* [#8342](https://github.com/netbox-community/netbox/issues/8342) - Restore `created` & `last_updated` fields missing from several REST API serializers
+* [#8357](https://github.com/netbox-community/netbox/issues/8357) - Add missing tags field to location filter form
+* [#8358](https://github.com/netbox-community/netbox/issues/8358) - Fix inconsistent styling of custom fields on filter & bulk edit forms
 
 ---
 
