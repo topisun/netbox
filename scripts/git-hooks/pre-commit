@@ -13,6 +13,7 @@ EXIT=0
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NOCOLOR='\033[0m'
+STATIC_DIR="$PWD/netbox/project-static"
 
 if [ -d ./venv/ ]; then
     VENV="$PWD/venv"
@@ -41,8 +42,16 @@ if [ $? != 0 ]; then
 fi
 
 echo "Checking UI ESLint, TypeScript, and Prettier compliance..."
-yarn --cwd "$PWD/netbox/project-static" validate
+UI_VALIDATION_OUTPUT="$(yarn --cwd "$STATIC_DIR" validate 2>&1)"
 if [ $? != 0 ]; then
+  printf "$UI_VALIDATION_OUTPUT\n"
+	EXIT=1
+fi
+
+echo "Running UI tests..."
+JEST_OUTPUT="$(yarn --cwd "$STATIC_DIR" test 2>&1)"
+if [ $? != 0 ]; then
+  printf "$JEST_OUTPUT\n"
 	EXIT=1
 fi
 

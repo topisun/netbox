@@ -9,6 +9,8 @@ module.exports = async () => {
         },
       ],
     },
+    setupFilesAfterEnv: ['./jest.setup.ts'],
+    testEnvironment: 'jsdom',
   };
   return config;
 };

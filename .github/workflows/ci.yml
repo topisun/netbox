@@ -59,6 +59,9 @@ jobs:
     - name: Check UI ESLint, TypeScript, and Prettier Compliance
       run: yarn --cwd netbox/project-static validate
     
+    - name: Run UI Tests
+      run: yarn --cwd netbox/project-static test
+    
     - name: Validate Static Asset Integrity
       run: scripts/verify-bundles.sh
 
