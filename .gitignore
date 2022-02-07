@@ -5,6 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 /netbox/project-static/node_modules
 /netbox/project-static/docs/*
+/netbox/project-static/coverage
 !/netbox/project-static/docs/.info
 /netbox/netbox/configuration.py
 /netbox/netbox/ldap_config.py
