@@ -6,11 +6,14 @@ module.exports = async () => {
         'esbuild-jest',
         {
           target: 'es2016',
+          sourcemap: true,
         },
       ],
     },
     setupFilesAfterEnv: ['./jest.setup.ts'],
     testEnvironment: 'jsdom',
+    collectCoverage: true,
+    collectCoverageFrom: ['src/**/*.{ts,js}', '!src/**/*.d.ts'],
   };
   return config;
 };

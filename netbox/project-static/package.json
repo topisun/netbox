@@ -20,7 +20,7 @@
     "validate:formatting": "yarn validate:formatting:scripts && yarn validate:formatting:styles",
     "validate:formatting:styles": "prettier -c styles/**/*.scss",
     "validate:formatting:scripts": "prettier -c src/**/*.ts",
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
