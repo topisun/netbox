@@ -90,13 +90,13 @@ export function resetSelect<S extends HTMLSelectElement>(select: S): void {
  * Type guard to determine if a value is an `Element`.
  */
 export function isElement(obj: Element | null | undefined): obj is Element {
-  return typeof obj !== null && typeof obj !== 'undefined';
+  return obj !== null && typeof obj !== 'undefined';
 }
 
 /**
  * Retrieve the CSRF token from cookie storage.
  */
-function getCsrfToken(): string {
+export function getCsrfToken(): string {
   const { csrftoken: csrfToken } = Cookie.parse(document.cookie);
   if (typeof csrfToken === 'undefined') {
     throw new Error('Invalid or missing CSRF token');
@@ -308,20 +308,6 @@ export function toggleVisibility<E extends HTMLElement | SVGElement>(
 export function toggleLoader(action: 'show' | 'hide'): void {
   for (const element of getElements<HTMLDivElement>('div.card-overlay')) {
     toggleVisibility(element, action);
-  }
-}
-
-/**
- * Get the value of every cell in a table.
- * @param table Table Element
- */
-export function* getRowValues(table: HTMLTableRowElement): Generator<string> {
-  for (const element of table.querySelectorAll<HTMLTableCellElement>('td')) {
-    if (element !== null) {
-      if (isTruthy(element.innerText) && element.innerText !== '—') {
-        yield replaceAll(element.innerText, '[\n\r]', '').trim();
-      }
-    }
   }
 }
 
