@@ -6,7 +6,7 @@ import {
   uniqueByProperty,
   toggleVisibility,
   findFirstAdjacent,
-} from './util';
+} from '../util';
 
 describe('replaceAll', () => {
   const original = 'string1with2numbers3in4it5!';
